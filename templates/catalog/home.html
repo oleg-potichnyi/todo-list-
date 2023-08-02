@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block heading %}
+TODO List
+{% endblock %}
+
+{% block add_task_button %}
+<a href="{% url 'catalog:add_task' %}" class="btn btn-primary">Add task</a>
+{% endblock %}
+
+{% block content %}
+  <hr>
+  <ul>
+    {% for task in tasks %}
+      <li>
+        {{ task.content }}
+        {% if not task.is_done %}
+          <a href="{% url 'catalog:complete_undo_task' task.pk %}" class="btn btn-success">Complete</a>
+        {% else %}
+          <a href="{% url 'catalog:complete_undo_task' task.pk %}" class="btn btn-warning">Undo</a>
+        {% endif %}
+        <a href="{% url 'catalog:update_task' task.pk %}" class="btn btn-primary">Update</a>
+        <a href="{% url 'catalog:delete_task' task.pk %}" class="btn btn-danger">Delete</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
