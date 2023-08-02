@@ -29,6 +29,7 @@ urlpatterns = [
         name="complete_undo_task",
     ),
     path("add/", views.add_task, name="add_task"),
+    path("add/", views.add_task, name="add_tag"),
 ]
 
 app_name = "catalog"

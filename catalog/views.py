@@ -9,7 +9,7 @@ from catalog.forms import TaskForm, TagForm
 from catalog.models import Task, Tag
 
 
-@login_required()
+# @login_required()
 def home_page(request) -> None:
     tasks = Task.objects.all()
     return render(request, "catalog/home.html", {"tasks": tasks, "current-path": request.path})

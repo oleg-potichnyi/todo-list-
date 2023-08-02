@@ -12,6 +12,6 @@ Delete Tag
   <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Delete</button>
-    <a href="{% url 'catalog:tag_list' %}" class="btn btn-secondary ml-2">Cancel</a>
+    <a href="{% url 'catalog:tag-list' %}" class="btn btn-secondary ml-2">Cancel</a>
   </form>
 {% endblock %}

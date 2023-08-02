@@ -18,12 +18,17 @@ Tags
     </tr>
   </thead>
   <tbody>
-    {% for tag in tags %}
-    <tr>
-      <td>{{ tag.name }}</td>
-      <td><a href="{% url 'catalog:update_task' tag.pk %}">Update</a></td>
-      <td><a href="{% url 'catalog:delete_task' tag.pk %}">Delete</a></td>
-    </tr>
+    {% for task in tasks %}
+      <li>
+        {{ task.content }}
+        {% if not task.is_done %}
+          <a href="{% url 'catalog:complete_undo_task' task.pk %}" class="btn btn-success">Complete</a>
+        {% else %}
+          <a href="{% url 'catalog:complete_undo_task' task.pk %}" class="btn btn-warning">Undo</a>
+        {% endif %}
+        <a href="{% url 'catalog:update_task' task.pk %}" class="btn btn-primary">Update</a>
+        <a href="{% url 'catalog:delete_task' task.pk %}" class="btn btn-danger">Delete</a>
+      </li>
     {% endfor %}
   </tbody>
 </table>
