@@ -1,6 +1,5 @@
 from typing import Any
 
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import generic
@@ -9,10 +8,9 @@ from catalog.forms import TaskForm, TagForm
 from catalog.models import Task, Tag
 
 
-# @login_required()
 def home_page(request) -> None:
     tasks = Task.objects.all()
-    return render(request, "catalog/home.html", {"tasks": tasks, "current-path": request.path})
+    return render(request, "catalog/task_list.html", {"tasks": tasks, "current-path": request.path})
 
 
 class TagListView(generic.View):
@@ -45,9 +43,9 @@ class TaskListView(generic.View):
     model = Task
 
     @staticmethod
-    def get(request: Any) -> None:
-        task = Task.objects.all()
-        return render(request, "catalog/task_list.html", {"task": task})
+    def get(request, *args, **kwargs) -> None:
+        tasks = Task.objects.order_by('-is_done', '-create_at')
+        return render(request, "catalog/task_list.html", {"tasks": tasks})
 
 
 class TaskCreateView(generic.CreateView):
@@ -59,7 +57,7 @@ class TaskCreateView(generic.CreateView):
 class TaskUpdateView(generic.UpdateView):
     model = Task
     fields = "__all__"
-    success_url = "catalog:task-list"
+    success_url = reverse_lazy("catalog:task-list")
 
 
 class TaskDeleteView(generic.DeleteView):
@@ -73,7 +71,7 @@ class CompleteUndoTaskView(generic.View):
         task = get_object_or_404(Task, pk=pk)
         task.is_done = not task.is_done
         task.save()
-        return redirect(reverse("home"))
+        return redirect(reverse("catalog:task-list"))
 
 
 def add_task(request) -> None:
@@ -81,7 +79,18 @@ def add_task(request) -> None:
         form = TaskForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("home")
+            return redirect("catalog:task-list")
     else:
         form = TaskForm
     return render(request, "catalog/add_task.html", {"form": form})
+
+
+def add_tag(request) -> None:
+    if request.method == "POST":
+        form = TagForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("catalog:tag-list")
+    else:
+        form = TagForm
+    return render(request, "catalog/add_tag.html", {"form": form})

@@ -21,8 +21,8 @@ Tags
     {% for tag in tags %}
     <tr>
       <td>{{ tag.name }}</td>
-      <td><a href="{% url 'catalog:tag-update' tag.pk %}">Update</a></td>
-      <td><a href="{% url 'catalog:tag-delete' tag.pk %}">Delete</a></td>
+      <td><a href="{% url 'catalog:tag-update' tag.pk %}" class="btn btn-primary" style="background-color: gray;">Update</a></td>
+      <td><a href="{% url 'catalog:tag-delete' tag.pk %}" class="btn btn-primary" style="background-color: gray;">Delete</a></td>
     </tr>
     {% endfor %}
   </tbody>

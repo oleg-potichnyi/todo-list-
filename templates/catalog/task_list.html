@@ -1,35 +1,40 @@
 {% extends "base.html" %}
 
 {% block heading %}
-Tags
+TODO List
 {% endblock %}
 
 {% block add_task_button %}
-<a href="{% url 'catalog:add_task' %}" class="btn btn-primary">Add</a>
+<div class="d-flex justify-content-end">
+  <a href="{% url 'catalog:add_task' %}" class="btn btn-primary">Add task</a>
+</div>
 {% endblock %}
 
 {% block content %}
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Update</th>
-      <th>Delete</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for task in tasks %}
-      <li>
-        {{ task.content }}
+<div class="task-list">
+  {% for task in tasks %}
+  <div class="task-block">
+    <div class="task-content">
+      <strong>{{ task.content }}</strong>
+      <div>
         {% if not task.is_done %}
-          <a href="{% url 'catalog:complete_undo_task' task.pk %}" class="btn btn-success">Complete</a>
+        <a href="{% url 'catalog:complete_undo_task' task.pk %}" class="btn btn-success btn-sm float-right">Complete</a>
         {% else %}
-          <a href="{% url 'catalog:complete_undo_task' task.pk %}" class="btn btn-warning">Undo</a>
+        <a href="{% url 'catalog:complete_undo_task' task.pk %}" class="btn btn-danger btn-sm float-right undo-button" style="background-color: gray;">Undo</a>
         {% endif %}
-        <a href="{% url 'catalog:update_task' task.pk %}" class="btn btn-primary">Update</a>
-        <a href="{% url 'catalog:delete_task' task.pk %}" class="btn btn-danger">Delete</a>
-      </li>
-    {% endfor %}
-  </tbody>
-</table>
+      </div>
+    </div>
+    <div class="task-details">
+      <p style="font-size: 0.8em;"> Created: {{ task.create_at|date:"F d, Y" }}{% if task.deadline %} <span style="color: brown;"> Deadline: {{ task.deadline|date:"F d, Y" }}{% endif %}</span></p>
+      <p>Tag: {% for tag in task.tags.all %}
+          {{ tag.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+        <a href="{% url 'catalog:task-update' task.pk %}">Update</a>
+        <a href="{% url 'catalog:task-delete' task.pk %}">Delete</a>
+      </p>
+    </div>
+  </div>
+  <hr style="border-top: 1px solid #ccc; margin: 10px 0;">
+  {% endfor %}
+</div>
 {% endblock %}
