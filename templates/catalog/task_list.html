@@ -15,7 +15,12 @@ TODO List
   {% for task in tasks %}
   <div class="task-block">
     <div class="task-content">
-      <strong>{{ task.content }}</strong>
+      <div>
+        <p>
+          <strong>{{ task.content }} <span style="color: #0ba10b;">Done</span></strong>
+        </p>
+      </div>
+
       <div>
         {% if not task.is_done %}
         <a href="{% url 'catalog:complete_undo_task' task.pk %}" class="btn btn-success btn-sm float-right">Complete</a>
